@@ -2,7 +2,7 @@
 
 Modular Neovim config built on [nvf](https://github.com/notashelf/nvf) and the
 [den](https://github.com/denful/den) framework. One file per plugin under
-`modules/`, each exposed as a `den.aspects.<plugin>` aspect and wired in
+`modules/plugins`, each exposed as a `den.aspects.<plugin>` aspect and wired in
 `modules/nvim.nix`. Run with `nix run .`.
 
 ## Plugins
