@@ -14,4 +14,9 @@
       languages
     ];
   };
+
+  den.aspects.nvim-tex.includes = with den.aspects; [
+    nvim
+    vimtex
+  ];
 }

@@ -51,7 +51,7 @@
     in
     {
       default = nvf den.aspects.nvim;
-
+      latex = nvf den.aspects.nvim-tex;
     };
 
 }
