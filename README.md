@@ -20,9 +20,10 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 
 ### ⚙️ Core
 
-| Aspect | File       | Notes                                     |
-| ------ | ---------- | ----------------------------------------- |
-| `core` | `core.nix` | Editor options, theme, leader (`<Space>`) |
+| Aspect      | File            | Notes                                            |
+| ----------- | --------------- | ------------------------------------------------ |
+| `core`      | `core.nix`      | Editor options, theme, leader (`<Space>`)        |
+| `autopairs` | `autopairs.nix` | Auto-close brackets, quotes (nvim-autopairs)     |
 
 ### 🍿 Snacks
 
@@ -36,6 +37,12 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 | ----------- | --------------- | ---------------------------------------------- |
 | `lsp`       | `lsp.nix`       | LSP core, diagnostics, Trouble, format on save |
 | `languages` | `languages.nix` | nix, markdown, bash, python, json, sql, java   |
+
+### 🤖 AI
+
+| Aspect   | File         | Notes                                                                       |
+| -------- | ------------ | --------------------------------------------------------------------------- |
+| `claude` | `claude.nix` | claudecode.nvim (right split). `claude` CLI installed per-machine; run `claude` to log in |
 
 ### 🛠️ Tools
 
@@ -67,6 +74,20 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 | `<leader>gp` | `n`  | GitHub PRs (open)    |
 | `<leader>gP` | `n`  | GitHub PRs (all)     |
 
+### 🤖 AI (Claude)
+
+| Key          | Mode | Action                |
+| ------------ | ---- | --------------------- |
+| `<leader>ac` | `n`  | Claude: toggle        |
+| `<leader>af` | `n`  | Claude: focus window  |
+| `<leader>as` | `v`  | Claude: send selection|
+| `<leader>ab` | `n`  | Claude: add buffer    |
+| `<leader>aa` | `n`  | Claude: accept diff   |
+| `<leader>ad` | `n`  | Claude: deny diff     |
+
+In the Claude split: `<Esc><Esc>` to enter normal mode, then `<C-w>h` / `<C-w>l`
+to move between Claude and your code (`<C-w>p` jumps back and forth).
+
 ### 🔔 Notifications
 
 | Key          | Mode | Action                |
@@ -76,11 +97,11 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 
 ### 🖥️ Terminal
 
-| Key          | Mode     | Action                  |
-| ------------ | -------- | ----------------------- |
-| `<leader>tt` | `n`, `t` | Terminal (float/toggle) |
-| `<leader>tj` | `n`, `t` | Terminal (bottom)       |
-| `<leader>tl` | `n`, `t` | Terminal (right)        |
+| Key          | Mode | Action                  |
+| ------------ | ---- | ----------------------- |
+| `<leader>tt` | `n`  | Terminal (float/toggle) |
+| `<leader>tj` | `n`  | Terminal (bottom)       |
+| `<leader>tl` | `n`  | Terminal (right)        |
 
 ### 📁 File manager
 

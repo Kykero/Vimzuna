@@ -9,6 +9,8 @@
       terminal
       yazi
       television
+      claude
+      autopairs
 
       lsp
       languages
