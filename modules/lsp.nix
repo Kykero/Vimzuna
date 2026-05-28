@@ -2,6 +2,8 @@
 { ... }:
 {
   den.aspects.lsp.vim = {
+    autocomplete.blink-cmp.enable = true;
+
     lsp = {
       enable = true;
       formatOnSave = true;

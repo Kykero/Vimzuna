@@ -41,7 +41,6 @@
       };
 
       mini.icons.enable = true;
-      visuals.nvim-web-devicons.enable = true;
     };
 
   };
