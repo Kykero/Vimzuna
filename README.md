@@ -22,14 +22,15 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 
 | Aspect      | File            | Notes                                            |
 | ----------- | --------------- | ------------------------------------------------ |
-| `core`      | `core.nix`      | Editor options, theme, leader (`<Space>`)        |
+| `core`      | `core.nix`      | Editor options, theme, leader & localleader (`<Space>`) |
 | `autopairs` | `autopairs.nix` | Auto-close brackets, quotes (nvim-autopairs)     |
+| `tmux-nav`  | `tmux-nav.nix`  | vim-tmux-navigator: `<C-hjkl>` across nvim splits & tmux panes |
 
 ### 🍿 Snacks
 
 | Aspect   | File         | Notes                                                                                                               |
 | -------- | ------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `snacks` | `snacks.nix` | lazygit, gh, notifier, dashboard, picker, QoL (scroll, quickfile, bigfile, input). Run `gh auth login` on first use |
+| `snacks` | `snacks.nix` | gh, notifier, dashboard, picker, QoL (scroll, quickfile, bigfile, input). Run `gh auth login` on first use |
 
 ### 🔬 LSP
 
@@ -48,9 +49,12 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 
 | Aspect       | File             | Notes                                                             |
 | ------------ | ---------------- | ----------------------------------------------------------------- |
-| `terminal`   | `terminal.nix`   | toggleterm: float / bottom / right                                |
 | `yazi`       | `yazi.nix`       | Yazi file manager (nvf)                                           |
 | `television` | `television.nix` | Television fuzzy-finder (tv.nvim). Needs `tv`, `bat`, `rg`, `fd` |
+
+> **Terminals & git live in tmux**, not in Neovim. There is no built-in
+> terminal aspect anymore. See [tmux](#-tmux) below — lazygit opens in a tmux
+> popup (`Prefix g`) and new shells are just tmux panes.
 
 ### 📝 LaTeX *(`.#latex` only)*
 
@@ -68,7 +72,6 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 
 | Key          | Mode | Action               |
 | ------------ | ---- | -------------------- |
-| `<leader>gg` | `n`  | Lazygit              |
 | `<leader>gi` | `n`  | GitHub Issues (open) |
 | `<leader>gI` | `n`  | GitHub Issues (all)  |
 | `<leader>gp` | `n`  | GitHub PRs (open)    |
@@ -95,13 +98,19 @@ to move between Claude and your code (`<C-w>p` jumps back and forth).
 | `<leader>uh` | `n`  | Notification history  |
 | `<leader>ud` | `n`  | Dismiss notifications |
 
-### 🖥️ Terminal
+### 🖥️ Terminal / tmux
 
-| Key          | Mode | Action                  |
-| ------------ | ---- | ----------------------- |
-| `<leader>tt` | `n`  | Terminal (float/toggle) |
-| `<leader>tj` | `n`  | Terminal (bottom)       |
-| `<leader>tl` | `n`  | Terminal (right)        |
+No in-editor terminal. Use tmux panes for shells and git. Navigation between
+Neovim splits and tmux panes is unified via vim-tmux-navigator:
+
+| Key     | Mode | Action                                   |
+| ------- | ---- | ---------------------------------------- |
+| `<C-h>` | `n`  | Move to split/pane on the left           |
+| `<C-j>` | `n`  | Move to split/pane below                 |
+| `<C-k>` | `n`  | Move to split/pane above                 |
+| `<C-l>` | `n`  | Move to split/pane on the right          |
+
+See the [tmux](#-tmux) section for the tmux-side bindings (lazygit, splits).
 
 ### 📁 File manager
 
@@ -136,6 +145,34 @@ VimTeX default `<localleader>l*` mappings:
 | `<localleader>lt` | Table of contents  |
 | `<localleader>le` | Show errors        |
 | `<localleader>lk` | Stop compilation   |
+
+---
+
+## 🖥️ tmux
+
+Terminals and git live in **tmux**, not in Neovim. A starter `.tmux.conf` ships
+at the repo root — it is **not** part of the Nix flake (tmux is a separate
+program). Install it with:
+
+```sh
+cp .tmux.conf ~/.config/tmux/tmux.conf   # tmux >= 3.1
+# or wire it via Home-Manager (programs.tmux) on NixOS
+```
+
+Requires tmux >= 3.2 for the lazygit popup. The prefix is remapped to `Ctrl-a`
+(edit the top of `.tmux.conf` to keep the default `Ctrl-b`).
+
+| Key          | Action                                    |
+| ------------ | ----------------------------------------- |
+| `Prefix g`   | Lazygit (centered popup)                  |
+| `Prefix \|`  | Split vertical (current dir)              |
+| `Prefix -`   | Split horizontal (current dir)            |
+| `Prefix c`   | New window (current dir)                  |
+| `Prefix r`   | Reload `tmux.conf`                         |
+| `<C-hjkl>`   | Move across nvim splits **and** tmux panes |
+
+The `<C-hjkl>` bindings work seamlessly thanks to vim-tmux-navigator (nvim side,
+`tmux-nav.nix`) plus the mirror bindings in `.tmux.conf`.
 
 ---
 

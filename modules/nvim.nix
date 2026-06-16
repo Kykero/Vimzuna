@@ -6,11 +6,11 @@
       core
 
       snacks
-      terminal
       yazi
       television
       claude
       autopairs
+      tmux-nav
 
       lsp
       languages

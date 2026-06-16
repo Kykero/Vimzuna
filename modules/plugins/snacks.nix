@@ -7,7 +7,6 @@
     { pkgs, ... }:
     {
       extraPackages = with pkgs; [
-        lazygit
         gh
       ];
 
@@ -22,9 +21,6 @@
 
           # --- Notifier ---
           notifier.enabled = true;
-
-          # --- Lazygit ---
-          lazygit.enabled = true;
 
           # --- GitHub ---
           picker.enabled = true;
@@ -59,15 +55,6 @@ Hi !
       };
 
       keymaps = [
-        # --- Lazygit ---
-        {
-          key = "<leader>gg";
-          mode = [ "n" ];
-          action = "function() Snacks.lazygit() end";
-          lua = true;
-          desc = "Lazygit";
-        }
-
         # --- GitHub ---
         {
           key = "<leader>gi";
