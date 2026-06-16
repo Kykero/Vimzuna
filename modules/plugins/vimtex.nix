@@ -15,7 +15,6 @@
       startPlugins = [ pkgs.vimPlugins.vimtex ];
 
       globals = {
-        maplocalleader = " ";
         vimtex_view_method = "zathura";
         vimtex_compiler_method = "latexmk";
         vimtex_quickfix_open_on_warning = 0;

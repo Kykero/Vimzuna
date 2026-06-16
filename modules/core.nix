@@ -7,6 +7,7 @@
       viAlias = true;
       vimAlias = true;
       globals.mapleader = " ";
+      globals.maplocalleader = " ";
 
       theme = {
         enable = true;
