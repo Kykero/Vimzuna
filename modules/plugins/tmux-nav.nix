@@ -7,6 +7,10 @@
   den.aspects.tmux-nav.vim =
     { pkgs, ... }:
     {
+      # lazygit runs from the tmux popup (Prefix g), provided here via the
+      # Neovim wrapper environment.
+      extraPackages = [ pkgs.lazygit ];
+
       startPlugins = [ pkgs.vimPlugins.vim-tmux-navigator ];
     };
 }
