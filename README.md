@@ -5,13 +5,14 @@
 [![NixOS](https://img.shields.io/badge/NixOS-unstable-5277c3?style=flat-square&logo=nixos&logoColor=white)](https://nixos.org)
 
 Modular Neovim config built on [nvf](https://github.com/notashelf/nvf) and the
-[den](https://github.com/denful/den) framework. One file per plugin under
-`modules/`, each exposed as a `den.aspects.<plugin>` aspect and wired in
-`modules/nvim.nix`.
+[den](https://github.com/denful/den) framework, designed to live inside
+**zellij**. One file per aspect under `modules/aspects/`, composed into
+profiles in `modules/profiles.nix`, exported as packages by `modules/den.nix`.
 
 ```sh
 nix run .           # default Neovim (no LaTeX)
 nix run .#latex     # Neovim + VimTeX + texlive-full
+nix run .#ide       # full zellij IDE session (bundled config + nvim)
 ```
 
 ---
@@ -40,15 +41,15 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 
 ### 🤖 AI
 
-| Aspect   | File         | Notes                                                                       |
-| -------- | ------------ | --------------------------------------------------------------------------- |
-| `claude` | `claude.nix` | claudecode.nvim (right split). `claude` CLI installed per-machine; run `claude` to log in |
+| Aspect   | File         | Notes                                                                                                          |
+| -------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| `claude` | `claude.nix` | claudecode.nvim — Claude runs in a zellij pane (native split as fallback). `claude` CLI installed per-machine; run `claude` to log in |
 
 ### 🛠️ Tools
 
 | Aspect       | File             | Notes                                                             |
 | ------------ | ---------------- | ----------------------------------------------------------------- |
-| `terminal`   | `terminal.nix`   | toggleterm: float / bottom / right                                |
+| `navigation` | `navigation.nix` | smart-splits.nvim: seamless nvim ↔ zellij pane navigation         |
 | `yazi`       | `yazi.nix`       | Yazi file manager (nvf)                                           |
 | `television` | `television.nix` | Television fuzzy-finder (tv.nvim). Needs `tv`, `bat`, `rg`, `fd` |
 
@@ -79,14 +80,13 @@ nix run .#latex     # Neovim + VimTeX + texlive-full
 | Key          | Mode | Action                |
 | ------------ | ---- | --------------------- |
 | `<leader>ac` | `n`  | Claude: toggle        |
-| `<leader>af` | `n`  | Claude: focus window  |
 | `<leader>as` | `v`  | Claude: send selection|
 | `<leader>ab` | `n`  | Claude: add buffer    |
 | `<leader>aa` | `n`  | Claude: accept diff   |
 | `<leader>ad` | `n`  | Claude: deny diff     |
 
-In the Claude split: `<Esc><Esc>` to enter normal mode, then `<C-w>h` / `<C-w>l`
-to move between Claude and your code (`<C-w>p` jumps back and forth).
+Claude lives in a zellij pane — move to/from it with `<C-h>` / `<C-l>`
+like any other pane.
 
 ### 🔔 Notifications
 
@@ -95,13 +95,15 @@ to move between Claude and your code (`<C-w>p` jumps back and forth).
 | `<leader>uh` | `n`  | Notification history  |
 | `<leader>ud` | `n`  | Dismiss notifications |
 
-### 🖥️ Terminal
+### 🧭 Navigation (splits ↔ zellij panes)
 
-| Key          | Mode | Action                  |
-| ------------ | ---- | ----------------------- |
-| `<leader>tt` | `n`  | Terminal (float/toggle) |
-| `<leader>tj` | `n`  | Terminal (bottom)       |
-| `<leader>tl` | `n`  | Terminal (right)        |
+| Key         | Mode  | Action                          |
+| ----------- | ----- | ------------------------------- |
+| `<C-h/j/k/l>` | `n,t` | Move between splits and panes |
+| `<A-h/j/k/l>` | `n,t` | Resize split                  |
+
+There is no in-editor terminal: shells, builds, etc. are zellij panes. Open
+one with your zellij bindings and `<C-h/j/k/l>` straight into it.
 
 ### 📁 File manager
 
@@ -136,6 +138,42 @@ VimTeX default `<localleader>l*` mappings:
 | `<localleader>lt` | Table of contents  |
 | `<localleader>le` | Show errors        |
 | `<localleader>lk` | Stop compilation   |
+
+---
+
+## 🖥️ Zellij workflow
+
+Neovim no longer manages terminals — it lives inside **zellij**, which owns
+panes, tabs and session resurrection (zellij serializes sessions natively;
+resurrect a dead one with `zellij attach` or the session manager).
+
+- `<C-h/j/k/l>` moves seamlessly between Neovim splits and zellij panes
+  (smart-splits.nvim on the nvim side, see contract below for the zellij side).
+- `<leader>ac` spawns Claude Code in a zellij pane on the right; the MCP
+  bridge (`<leader>as`, diffs, …) works exactly as before since the WebSocket
+  server runs inside Neovim.
+- Outside zellij, Claude falls back to a native `:terminal` split.
+
+### Self-contained: the `ide` package
+
+Both sides of the workflow ship in one package — `packages.ide` installs a
+`vimzuna` command that starts (or re-attaches to) a zellij session with its
+own bundled config (`modules/zellij.nix`):
+
+- zellij + [vim-zellij-navigator](https://github.com/hiasr/vim-zellij-navigator)
+  bound to `Ctrl/Alt+hjkl`, matching smart-splits.nvim
+  (`modules/aspects/navigation.nix`) — the two sides can never drift apart
+- `session_serialization` — the `vimzuna` session survives reboots,
+  relaunching the command revives it
+- a layout starting nvim in the first tab
+
+Nothing to configure system-side; a consumer just installs the package:
+
+```nix
+inputs.vimzuna.packages.${system}.ide
+```
+
+Still installed per-machine: the `claude` CLI.
 
 ---
 

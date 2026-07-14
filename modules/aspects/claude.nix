@@ -1,7 +1,12 @@
-# mtodules/claude.nix
+# modules/aspects/claude.nix
 # claudecode.nvim — bridges Neovim with the Claude Code CLI over the
 # MCP WebSocket protocol. The `claude` CLI itself is NOT provided here;
 # install it per-machine via the system config and run `claude` to log in.
+#
+# Claude runs in a zellij pane via the "external" terminal provider:
+# the MCP server lives in Neovim, the CLI connects back through
+# ~/.claude/ide lock files. Outside zellij, the native terminal
+# provider is used as a fallback.
 {
   den.aspects.claude.vim =
     { pkgs, ... }:
@@ -9,14 +14,21 @@
       extraPlugins.claudecode-nvim = {
         package = pkgs.vimPlugins.claudecode-nvim;
         setup = ''
-          require("claudecode").setup({
+          local terminal
+          if vim.env.ZELLIJ then
             terminal = {
-              provider = "snacks",
-              snacks_win_opts = {
-                position = "right",
-                width = 0.40,
+              provider = "external",
+              provider_opts = {
+                -- new pane on the right, closed when claude exits
+                external_terminal_cmd = "zellij run -c -d right -- %s",
               },
-            },
+            }
+          else
+            terminal = { provider = "native" }
+          end
+
+          require("claudecode").setup({
+            terminal = terminal,
           })
         '';
       };
@@ -27,12 +39,6 @@
           mode = [ "n" ];
           action = "<cmd>ClaudeCode<cr>";
           desc = "Claude: toggle";
-        }
-        {
-          key = "<leader>af";
-          mode = [ "n" ];
-          action = "<cmd>ClaudeCodeFocus<cr>";
-          desc = "Claude: focus window";
         }
         {
           key = "<leader>as";

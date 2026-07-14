@@ -1,4 +1,4 @@
-# modules/lsp.nix
+# modules/aspects/lsp.nix
 { ... }:
 {
   den.aspects.lsp.vim = {

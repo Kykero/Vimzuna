@@ -1,3 +1,4 @@
+# modules/profiles.nix
 { den, ... }:
 {
   den.aspects.nvim = {
@@ -6,7 +7,7 @@
       core
 
       snacks
-      terminal
+      navigation
       yazi
       television
       claude

@@ -1,4 +1,4 @@
-# modules/yazi.nix
+# modules/aspects/yazi.nix
 { ... }:
 {
   den.aspects.yazi.vim =

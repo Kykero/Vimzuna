@@ -1,4 +1,4 @@
-# modules/television.nix
+# modules/aspects/television.nix
 { ... }:
 {
   den.aspects.television.vim =

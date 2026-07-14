@@ -1,4 +1,4 @@
-# modules/snacks.nix
+# modules/aspects/snacks.nix
 # Single aspect for snacks.nvim — all modules and setupOpts in one place
 # to avoid cross-aspect setupOpts merge issues.
 { ... }:

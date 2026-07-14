@@ -1,4 +1,4 @@
-# modules/vimtex.nix
+# modules/aspects/vimtex.nix
 { ... }:
 {
   den.aspects.vimtex.vim =

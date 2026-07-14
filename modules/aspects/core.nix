@@ -1,4 +1,4 @@
-# modules/nvim.nix
+# modules/aspects/core.nix
 { den, ... }:
 {
   den.aspects.core = {

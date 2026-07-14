@@ -1,4 +1,4 @@
-# modules/languages.nix
+# modules/aspects/languages.nix
 { ... }:
 {
   den.aspects.languages.vim =
@@ -22,7 +22,7 @@
           };
           lsp = {
             enable = true;
-            server = [ "nixd" ];
+            servers = [ "nixd" ];
           };
         };
 
