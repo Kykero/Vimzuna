@@ -5,6 +5,7 @@
 
     includes = with den.aspects; [
       core
+      python
 
       snacks
       navigation
