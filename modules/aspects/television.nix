@@ -7,6 +7,9 @@
       extraPackages = [
         pkgs.television
         pkgs.bat
+        # sources of the files (fd) and text (rg) channels
+        pkgs.fd
+        pkgs.ripgrep
       ];
 
       extraPlugins.tv-nvim = {
